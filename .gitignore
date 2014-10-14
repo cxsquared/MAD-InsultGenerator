@@ -1,8 +1,9 @@
 # =============== #
 # Unity generated #
 # =============== #
-Temp/
-Library/
+InsultGenerator/Temp/
+InsultGenerator/Library/
+InsultGenerator/Obj/d
 
 # ===================================== #
 # Visual Studio / MonoDevelop generated #
