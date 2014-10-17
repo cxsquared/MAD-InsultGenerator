@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Text.RegularExpressions;
 
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+
 
 /// <summary>
 /// <author>Jefferson Reis</author>
@@ -11,18 +14,17 @@ using System.Text.RegularExpressions;
 public class GoogleTextToSpeech : MonoBehaviour
 {
 	public string words = "Hello";
+
+	[SerializeField]
+	private Button MyButton = null; // assign in the editor
+
+	[SerializeField]
+	private InputField field = null;
 	
-	IEnumerator Start ()
+	public void Start ()
 	{
-		// Remove the "spaces" in excess
-		Regex rgx = new Regex ("\\s+");
-		// Replace the "spaces" with "% 20" for the link Can be interpreted
-		string result = rgx.Replace (words, "%20");
-		string url = "http://translate.google.com/translate_tts?tl=en&q=" + result;
-		WWW www = new WWW (url);
-		yield return www;
-		audio.clip = www.GetAudioClip (false, false, AudioType.MPEG);
-		audio.Play ();
+		MyButton.onClick.AddListener(() => { onClick();});  
+
 	}
 	
 	public void setText(string text){
@@ -31,8 +33,27 @@ public class GoogleTextToSpeech : MonoBehaviour
 
 	public void say(string text){
 		setText (text);
-		StartCoroutine (Start ());
+		StartCoroutine (say ());
 	}
+
+	public void onClick() {
+		setText (field.value);
+		StartCoroutine(say ());
+		Debug.Log ("Button clicked");
+	}
+
+	public IEnumerator say(){
+		// Remove the "spaces" in excess
+		Regex rgx = new Regex ("\\s+");
+		// Replace the "spaces" with "% 20" for the link Can be interpreted
+		string result = rgx.Replace (words, "%20");
+		string url = "http://translate.google.com/translate_tts?tl=fr&q=" + result;
+		WWW www = new WWW (url);
+		yield return www;
+		audio.clip = www.GetAudioClip (false, false, AudioType.MPEG);
+		audio.Play ();
+	}
+
 	
 	
 }//closes the class
