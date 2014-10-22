@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class InsultGenerator : MonoBehaviour {
 
@@ -11,6 +12,11 @@ public class InsultGenerator : MonoBehaviour {
 	private Transform t;
 	public bool tActive = true;
 
+	public Button bnt;
+	public Text btnText;
+
+	public GoogleTextToSpeech textToSpeech;
+
 	// Use this for initialization
 	void Start () {
 
@@ -20,6 +26,7 @@ public class InsultGenerator : MonoBehaviour {
 		listItem.transform.parent = itemSpawn.transform;
 		*/
 
+		bnt.onClick.AddListener(() => { btnClick(); });
 
 		t = Instantiate (m_prefab) as Transform;
 		t.parent = transform;
@@ -41,6 +48,19 @@ public class InsultGenerator : MonoBehaviour {
 				t.transform.position += Vector3.up * Time.deltaTime * 60;
 			}
 		}
+	}
+
+	private void btnClick() {
+		string noun = TextManager.getRandomNoun();
+		string adjective = TextManager.getRandomAjective();
+
+		btnText.text = adjective + " " + noun;
+
+		textToSpeech.say (adjective + " " + noun);
+
+		TextManager.addNoun (noun);
+		TextManager.addAdjective (adjective);
+
 	}
 
 }
