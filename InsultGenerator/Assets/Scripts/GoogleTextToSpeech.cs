@@ -14,6 +14,7 @@ using UnityEngine.EventSystems;
 public class GoogleTextToSpeech : MonoBehaviour
 {
 	public string words = "Hello";
+	public bool french = false;
 
 	[SerializeField]
 	private Button MyButton = null; // assign in the editor
@@ -47,7 +48,12 @@ public class GoogleTextToSpeech : MonoBehaviour
 		Regex rgx = new Regex ("\\s+");
 		// Replace the "spaces" with "% 20" for the link Can be interpreted
 		string result = rgx.Replace (words, "%20");
-		string url = "http://translate.google.com/translate_tts?tl=fr&q=" + result;
+		string url = "";
+		if (french) {
+			url = "http://translate.google.com/translate_tts?tl=fr&q=" + result;
+		} else {
+			url = "http://translate.google.com/translate_tts?tl=en&q=" + result;
+		}
 		WWW www = new WWW (url);
 		yield return www;
 		audio.clip = www.GetAudioClip (false, false, AudioType.MPEG);
