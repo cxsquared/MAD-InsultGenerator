@@ -37,7 +37,9 @@ public class InsultGenerator : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (tActive){
-			t.transform.position += Vector3.up * Time.deltaTime * 60;
+			if (t != null){
+				t.transform.position += Vector3.up * Time.deltaTime * 60;
+			}
 		}
 	}
 
