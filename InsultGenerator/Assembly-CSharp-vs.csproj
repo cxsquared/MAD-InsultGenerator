@@ -47,7 +47,9 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\GoogleTextToSpeech.cs" />
+     <Compile Include="Assets\Scripts\InsultBox.cs" />
      <Compile Include="Assets\Scripts\InsultGenerator.cs" />
+     <Compile Include="Assets\Scripts\InsultManager.cs" />
      <Compile Include="Assets\Scripts\TextManager.cs" />
      <Compile Include="Assets\Scripts\destroyItem.cs" />
      <None Include="Assets\Scripts\nouns.txt" />

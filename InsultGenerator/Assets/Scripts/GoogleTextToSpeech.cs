@@ -24,7 +24,7 @@ public class GoogleTextToSpeech : MonoBehaviour
 	
 	public void Start ()
 	{
-		MyButton.onClick.AddListener(() => { onClick();});  
+		//MyButton.onClick.AddListener(() => { onClick();});  
 
 	}
 	

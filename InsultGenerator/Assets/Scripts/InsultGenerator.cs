@@ -8,14 +8,16 @@ public class InsultGenerator : MonoBehaviour {
 	public GameObject listItem;
 	public GameObject itemSpawn;
 	*/
-	public Transform m_prefab;
-	private Transform t;
+	public GameObject m_prefab;
+	//private Transform t;
 	public bool tActive = true;
 
-	public Button bnt;
+	public Button btn;
 	public Text btnText;
 
 	public GoogleTextToSpeech textToSpeech;
+
+	public int insultBoxHeight;
 
 	// Use this for initialization
 	void Start () {
@@ -26,28 +28,48 @@ public class InsultGenerator : MonoBehaviour {
 		listItem.transform.parent = itemSpawn.transform;
 		*/
 
-		bnt.onClick.AddListener(() => { btnClick(); });
+		btn.onClick.AddListener(() => { btnClick(); });
 
+		init ();
+
+		/*
 		t = Instantiate (m_prefab) as Transform;
 		t.parent = transform;
-		t.localPosition = Vector3.zero;
+		//t.localPosition = Vector3.zero;
+		t.localPosition = new Vector3(0 - 100,btn.transform.localPosition.y - 100, 0);
 		t.localRotation = Quaternion.identity;
 		t.gameObject.name="My awesome Instance!";
+		*/
 
 
-		/*t.transform.Translate (Vector3.up * Time.deltaTime * 20);*/
 
+		//t.transform.Translate (Vector3.up * Time.deltaTime * 20);
+		                                                            
+	}
 
+	private void init(){
+
+		int startLocaiton = -300;
+
+		for (int i = 0; i < 4; i++) {
+			GameObject t = Instantiate (m_prefab) as GameObject;
+			Debug.Log("Name = " + m_prefab.name);
+			t.transform.parent = this.transform;
+			//t.localPosition = Vector3.zero;
+			t.transform.localPosition = new Vector3 (0 - 100, startLocaiton + (insultBoxHeight*i), 0);
+			t.transform.localRotation = Quaternion.identity;
+			//t.name = "My awesome Instance!";
+		}
 	}
 
 	
 	// Update is called once per frame
 	void Update () {
-		if (tActive){
+		/*if (tActive){
 			if (t != null){
-				t.transform.position += Vector3.up * Time.deltaTime * 60;
+				//t.transform.position += Vector3.up * Time.deltaTime * 60;
 			}
-		}
+		}*/
 	}
 
 	private void btnClick() {
@@ -61,6 +83,20 @@ public class InsultGenerator : MonoBehaviour {
 		TextManager.addNoun (noun);
 		TextManager.addAdjective (adjective);
 
+	}
+
+	public void insultBoxDestoryed(){
+		addNewBox ();
+	}
+
+	private void addNewBox(){
+		GameObject t = Instantiate (this.m_prefab) as GameObject;
+		Debug.Log (this.m_prefab.name);
+		t.transform.parent = this.transform;
+		//t.localPosition = Vector3.zero;
+		t.transform.localPosition = new Vector3(0 - 100,-300, 0);
+		t.transform.localRotation = Quaternion.identity;
+		//t.name="My awesome Instance!";
 	}
 
 }
