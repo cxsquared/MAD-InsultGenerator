@@ -34,7 +34,7 @@ public class InsultManager : MonoBehaviour {
 
 		if (rolling) {
 			// When rolling set the speed and reset the bools.
-			speed = 600;
+			speed = 1000;
 			done = false;
 			talked = false;
 		} else if (speed <= 20) {
@@ -57,11 +57,11 @@ public class InsultManager : MonoBehaviour {
 		textArray = new ArrayList ();
 		// Adds all the starting text objects to the stage
 		for (int i = (int)-prefab.rectTransform.sizeDelta.y; i < canvasHeight + prefab.rectTransform.sizeDelta.y; i += (int) prefab.rectTransform.sizeDelta.y) {
-			addNewBox(i);
+			addNewBox(i, true);
 		}
 	}
 
-	private void addNewBox(int y) {
+	private void addNewBox(int y, bool init) {
 		// Instantiat new text object
 		Text newTxt = Instantiate (prefab) as Text;
 		// Setting parent as the gameObject attached to this script
@@ -69,7 +69,12 @@ public class InsultManager : MonoBehaviour {
 		// This is a temp fix for weird anchor things happening
 		newTxt.rectTransform.sizeDelta = new Vector2 (800, 75);
 		// this centers the text object
-		newTxt.rectTransform.position = new Vector3 (400, y);
+		if (!init) {
+			Text lastText = (Text) textArray[textArray.Count-1];
+			newTxt.rectTransform.position = new Vector3(400, lastText.rectTransform.position.y - lastText.rectTransform.sizeDelta.y);
+		} else {
+			newTxt.rectTransform.position = new Vector3 (400, y);
+		}
 		// this makes sure that the text object is rendered behind the button
 		newTxt.transform.SetSiblingIndex (0);
 		// Adding to array so we can keep track of it
@@ -79,7 +84,7 @@ public class InsultManager : MonoBehaviour {
 	public void insultBoxDestoryed(Text txtObj){
 		textArray.Remove (txtObj);
 		//Adds a text box to the bottom of the stage
-		addNewBox ((int)-prefab.rectTransform.sizeDelta.y);
+		addNewBox ((int)-prefab.rectTransform.sizeDelta.y, false);
 	}
 
 	private void buttonClicked(){
