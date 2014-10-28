@@ -56,7 +56,7 @@ public class InsultManager : MonoBehaviour {
 	private void init(){
 		textArray = new ArrayList ();
 		// Adds all the starting text objects to the stage
-		for (int i = (int)-prefab.rectTransform.sizeDelta.y; i < canvasHeight + prefab.rectTransform.sizeDelta.y; i += (int) prefab.rectTransform.sizeDelta.y) {
+		for (int i = canvasHeight + (int)prefab.rectTransform.sizeDelta.y; i > 0; i -= (int) prefab.rectTransform.sizeDelta.y) {
 			addNewBox(i, true);
 		}
 	}
