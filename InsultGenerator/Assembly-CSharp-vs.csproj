@@ -51,7 +51,6 @@
      <Compile Include="Assets\Scripts\InsultGenerator.cs" />
      <Compile Include="Assets\Scripts\InsultManager.cs" />
      <Compile Include="Assets\Scripts\TextManager.cs" />
-     <Compile Include="Assets\Scripts\destroyItem.cs" />
      <None Include="Assets\Scripts\nouns.txt" />
      <None Include="Assets\Scripts\adjectives.txt" />
  <Reference Include="UnityEngine.UI">
