@@ -14,11 +14,6 @@ public class TextManager : MonoBehaviour {
 	private static ArrayList nouns;
 	private static ArrayList adjectives;
 
-	enum WordType {
-		NOUN,
-		ADJECTIVE
-	};
-
 	// Use this for initialization
 	void Start () {
 		nouns = new ArrayList ();

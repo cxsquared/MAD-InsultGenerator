@@ -2,12 +2,19 @@
 using System.Collections;
 using UnityEngine.UI;
 
+// Enum to keep word types
+public enum WordType {
+	NOUN,
+	ADJECTIVE
+};
+
 public class InsultManager : MonoBehaviour {
 
 	public Text prefab;
 	public GoogleTextToSpeech textToSpeech;
 
-	private ArrayList textArray;
+	private ArrayList nounArray;
+	private ArrayList adjectiveArray;
 
 	public int canvasHeight;
 	public float speed = 60f;
@@ -27,7 +34,12 @@ public class InsultManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		// Setting the speed for each text obj in the array
-		foreach (Text txtObj in textArray) {
+		foreach (Text txtObj in nounArray) {
+			InsultBox ib = txtObj.GetComponent("InsultBox") as InsultBox;
+			ib.speed = this.speed;
+		}
+
+		foreach (Text txtObj in adjectiveArray) {
 			InsultBox ib = txtObj.GetComponent("InsultBox") as InsultBox;
 			ib.speed = this.speed;
 		}
@@ -54,37 +66,75 @@ public class InsultManager : MonoBehaviour {
 	}
 
 	private void init(){
-		textArray = new ArrayList ();
+		nounArray = new ArrayList ();
+		adjectiveArray = new ArrayList ();
 		// Adds all the starting text objects to the stage
 		for (int i = canvasHeight + (int)prefab.rectTransform.sizeDelta.y; i > 0; i -= (int) prefab.rectTransform.sizeDelta.y) {
-			addNewBox(i, true);
+			addNewBox(i, true, WordType.NOUN);
+			addNewBox(i, true, WordType.ADJECTIVE);
 		}
 	}
 
-	private void addNewBox(int y, bool init) {
+	private void addNewBox(int y, bool init, WordType type) {
 		// Instantiat new text object
 		Text newTxt = Instantiate (prefab) as Text;
 		// Setting parent as the gameObject attached to this script
-		newTxt.transform.parent = this.transform;
+		newTxt.transform.SetParent(this.transform, false);
 		// This is a temp fix for weird anchor things happening
-		newTxt.rectTransform.sizeDelta = new Vector2 (800, 75);
-		// this centers the text object
-		if (!init) {
-			Text lastText = (Text) textArray[textArray.Count-1];
-			newTxt.rectTransform.position = new Vector3(400, lastText.rectTransform.position.y - lastText.rectTransform.sizeDelta.y);
-		} else {
-			newTxt.rectTransform.position = new Vector3 (400, y);
-		}
+		newTxt.rectTransform.sizeDelta = new Vector2 (Screen.width/2, 75);
 		// this makes sure that the text object is rendered behind the button
 		newTxt.transform.SetSiblingIndex (0);
 		// Adding to array so we can keep track of it
-		textArray.Add (newTxt);
+		if (type == WordType.NOUN) {
+			addNounBox(y, newTxt, init);
+		} else {
+			addAdjectiveBox(y, newTxt, init);
+		}
+
 	}
 
-	public void insultBoxDestoryed(Text txtObj){
-		textArray.Remove (txtObj);
+	private void addAdjectiveBox (int y, Text text, bool init) {
+		// this centers the text object
+		if (!init) {
+			Text lastText = (Text) adjectiveArray[adjectiveArray.Count-1];
+			Debug.Log("Last rect at " + lastText.rectTransform.position.y);
+			text.rectTransform.position = new Vector3(text.rectTransform.sizeDelta.y, lastText.rectTransform.position.y + lastText.rectTransform.sizeDelta.y);
+		} else {
+			text.rectTransform.position = new Vector3 (text.rectTransform.sizeDelta.y, y);
+		}
+		// Adding to array so we can keep track of it
+		InsultBox ib = text.GetComponent("InsultBox") as InsultBox;
+		ib.type = WordType.ADJECTIVE;
+		adjectiveArray.Add (text);
+
+		Debug.Log("Adjective added at " + text.rectTransform.position.y);
+	}
+
+	private void addNounBox(int y, Text text, bool init){
+		// this centers the text object
+		if (!init) {
+			Text lastText = (Text) nounArray[nounArray.Count-1];
+			text.rectTransform.position = new Vector3(-text.rectTransform.sizeDelta.y + Screen.width, lastText.rectTransform.position.y - lastText.rectTransform.sizeDelta.y);
+		} else {
+			text.rectTransform.position = new Vector3 (-text.rectTransform.sizeDelta.y + Screen.width, y);
+		}
+		// Adding to array so we can keep track of it
+		InsultBox ib = text.GetComponent("InsultBox") as InsultBox;
+		ib.type = WordType.NOUN;
+		nounArray.Add (text);
+	}
+
+	public void insultBoxDestoryed(Text txtObj, WordType type){
+		if (type == WordType.NOUN) {
+			nounArray.Remove(txtObj);
+			//Adds a text box to the bottom of the stage
+			addNewBox ((int)-prefab.rectTransform.sizeDelta.y, false, type);
+		} else {
+			adjectiveArray.Remove(txtObj);
+			//Adds a text box to the bottom of the stage
+			addNewBox ((int)(canvasHeight), false, type);
+		}
 		//Adds a text box to the bottom of the stage
-		addNewBox ((int)-prefab.rectTransform.sizeDelta.y, false);
 	}
 
 	private void buttonClicked(){
@@ -95,13 +145,13 @@ public class InsultManager : MonoBehaviour {
 	private void talk(){
 		// Finding which text obj is mostly in the middle and saying it.
 		// Using the talked bool to make sure the program only says one insult
-		foreach (Text txt in textArray) {
-			float yPos = txt.rectTransform.position.y;
-			if (yPos >= canvasHeight/2 - txt.rectTransform.sizeDelta.y && yPos <= canvasHeight/2 + txt.rectTransform.sizeDelta.y){
-				textToSpeech.say(txt.text);
-				talked = true;
-				return;
-			}
-		}
+//		foreach (Text txt in textArray) {
+//			float yPos = txt.rectTransform.position.y;
+//			if (yPos >= canvasHeight/2 - txt.rectTransform.sizeDelta.y && yPos <= canvasHeight/2 + txt.rectTransform.sizeDelta.y){
+//				textToSpeech.say(txt.text);
+//				talked = true;
+//				return;
+//			}
+//		}
 	}
 }
