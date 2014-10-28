@@ -145,13 +145,21 @@ public class InsultManager : MonoBehaviour {
 	private void talk(){
 		// Finding which text obj is mostly in the middle and saying it.
 		// Using the talked bool to make sure the program only says one insult
-//		foreach (Text txt in textArray) {
-//			float yPos = txt.rectTransform.position.y;
-//			if (yPos >= canvasHeight/2 - txt.rectTransform.sizeDelta.y && yPos <= canvasHeight/2 + txt.rectTransform.sizeDelta.y){
-//				textToSpeech.say(txt.text);
-//				talked = true;
-//				return;
-//			}
-//		}
+		string text = "";
+		foreach (Text txt in adjectiveArray) {
+			float yPos = txt.rectTransform.position.y;
+			if (yPos >= canvasHeight/2 - txt.rectTransform.sizeDelta.y && yPos <= canvasHeight/2 + txt.rectTransform.sizeDelta.y){
+				text = txt.text + " ";
+			}
+		}
+		foreach (Text txt in nounArray) {
+			float yPos = txt.rectTransform.position.y;
+			if (yPos >= canvasHeight/2 - txt.rectTransform.sizeDelta.y && yPos <= canvasHeight/2 + txt.rectTransform.sizeDelta.y){
+				text += txt.text;
+				talked = true;
+				textToSpeech.say(text);
+				return;
+			}
+		}
 	}
 }
