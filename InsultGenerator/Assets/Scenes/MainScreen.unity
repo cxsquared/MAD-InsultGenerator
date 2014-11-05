@@ -318,7 +318,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   words: Hello
   french: 0
-  MyButton: {fileID: 1766501189}
   field: {fileID: 0}
 --- !u!82 &1306065487
 AudioSource:

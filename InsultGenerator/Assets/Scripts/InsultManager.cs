@@ -81,13 +81,15 @@ public class InsultManager : MonoBehaviour {
 		// Instantiat new text object
 		if (type == WordType.ADJECTIVE) {
 			newTxt = Instantiate (prefabLeft) as Text;
+			newTxt.rectTransform.offsetMin = new Vector2(0, 0);
+			newTxt.rectTransform.offsetMax = new Vector2(0, newTxt.rectTransform.sizeDelta.y);
 		} else if (type == WordType.NOUN) {
 			newTxt = Instantiate (prefabRight) as Text;
+			newTxt.rectTransform.offsetMin = new Vector2(0, 0);
+			newTxt.rectTransform.offsetMax = new Vector2(0, newTxt.rectTransform.sizeDelta.y);
 		}
 		// Setting parent as the gameObject attached to this script
 		newTxt.transform.SetParent(this.transform, false);
-		// Set size
-		newTxt.rectTransform.localScale.Set (1f, 1f, 1f);
 		// this makes sure that the text object is rendered behind the button
 		newTxt.transform.SetSiblingIndex (0);
 		// Adding to array so we can keep track of it
