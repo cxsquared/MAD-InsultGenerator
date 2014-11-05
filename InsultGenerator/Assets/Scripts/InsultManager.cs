@@ -10,7 +10,8 @@ public enum WordType {
 
 public class InsultManager : MonoBehaviour {
 
-	public Text prefab;
+	public Text prefabLeft;
+	public Text prefabRight;
 	public GoogleTextToSpeech textToSpeech;
 
 	private ArrayList nounArray;
@@ -69,19 +70,24 @@ public class InsultManager : MonoBehaviour {
 		nounArray = new ArrayList ();
 		adjectiveArray = new ArrayList ();
 		// Adds all the starting text objects to the stage
-		for (int i = canvasHeight + (int)prefab.rectTransform.sizeDelta.y; i > 0; i -= (int) prefab.rectTransform.sizeDelta.y) {
+		for (int i = canvasHeight + (int)prefabRight.rectTransform.sizeDelta.y; i > 0; i -= (int) prefabRight.rectTransform.sizeDelta.y) {
 			addNewBox(i, true, WordType.NOUN);
 			addNewBox(i, true, WordType.ADJECTIVE);
 		}
 	}
 
 	private void addNewBox(int y, bool init, WordType type) {
+		Text newTxt = null;
 		// Instantiat new text object
-		Text newTxt = Instantiate (prefab) as Text;
+		if (type == WordType.ADJECTIVE) {
+			newTxt = Instantiate (prefabLeft) as Text;
+		} else if (type == WordType.NOUN) {
+			newTxt = Instantiate (prefabRight) as Text;
+		}
 		// Setting parent as the gameObject attached to this script
 		newTxt.transform.SetParent(this.transform, false);
-		// This is a temp fix for weird anchor things happening
-		newTxt.rectTransform.sizeDelta = new Vector2 (Screen.width/2, 75);
+		// Set size
+		newTxt.rectTransform.localScale.Set (1f, 1f, 1f);
 		// this makes sure that the text object is rendered behind the button
 		newTxt.transform.SetSiblingIndex (0);
 		// Adding to array so we can keep track of it
@@ -97,17 +103,18 @@ public class InsultManager : MonoBehaviour {
 		// this centers the text object
 		if (!init) {
 			Text lastText = (Text) adjectiveArray[adjectiveArray.Count-1];
-			Debug.Log("Last rect at " + lastText.rectTransform.position.y);
+			//Debug.Log("Last rect at " + lastText.rectTransform.position.y);
 			text.rectTransform.position = new Vector3(text.rectTransform.sizeDelta.y, lastText.rectTransform.position.y + lastText.rectTransform.sizeDelta.y);
 		} else {
 			text.rectTransform.position = new Vector3 (text.rectTransform.sizeDelta.y, y);
 		}
+		//text.rectTransform.anchorMax = new Vector2 (-Screen.width/2, 0);;
 		// Adding to array so we can keep track of it
 		InsultBox ib = text.GetComponent("InsultBox") as InsultBox;
 		ib.type = WordType.ADJECTIVE;
 		adjectiveArray.Add (text);
 
-		Debug.Log("Adjective added at " + text.rectTransform.position.y);
+		//Debug.Log("Adjective added at " + text.rectTransform.position.y);
 	}
 
 	private void addNounBox(int y, Text text, bool init){
@@ -118,6 +125,7 @@ public class InsultManager : MonoBehaviour {
 		} else {
 			text.rectTransform.position = new Vector3 (-text.rectTransform.sizeDelta.y + Screen.width, y);
 		}
+		//text.rectTransform.anchoredPosition = new Vector2(Screen.width / 2, 0);
 		// Adding to array so we can keep track of it
 		InsultBox ib = text.GetComponent("InsultBox") as InsultBox;
 		ib.type = WordType.NOUN;
@@ -128,7 +136,7 @@ public class InsultManager : MonoBehaviour {
 		if (type == WordType.NOUN) {
 			nounArray.Remove(txtObj);
 			//Adds a text box to the bottom of the stage
-			addNewBox ((int)-prefab.rectTransform.sizeDelta.y, false, type);
+			addNewBox ((int)-prefabRight.rectTransform.sizeDelta.y, false, type);
 		} else {
 			adjectiveArray.Remove(txtObj);
 			//Adds a text box to the bottom of the stage

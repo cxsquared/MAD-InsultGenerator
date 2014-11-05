@@ -16,8 +16,8 @@ public class GoogleTextToSpeech : MonoBehaviour
 	public string words = "Hello";
 	public bool french = false;
 
-	[SerializeField]
-	private Button MyButton = null; // assign in the editor
+	//[SerializeField]
+	//private Button MyButton = null; // assign in the editor
 
 	[SerializeField]
 	private InputField field = null;
