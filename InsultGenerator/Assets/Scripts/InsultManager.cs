@@ -23,13 +23,16 @@ public class InsultManager : MonoBehaviour {
 	public bool rolling = false;
 	public bool talked = false;
 	public bool done = false;
+	
+	public GameObject roll_btn;
 
 	// Use this for initialization
 	void Start () {
 		init ();
 
 		// Finding Button
-		GameObject.FindObjectOfType<Button> ().onClick.AddListener(() => { buttonClicked(); });
+		roll_btn.GetComponent<Button> ().onClick.AddListener(() => { buttonClicked(); });
+
 	}
 	
 	// Update is called once per frame
@@ -147,7 +150,7 @@ public class InsultManager : MonoBehaviour {
 		//Adds a text box to the bottom of the stage
 	}
 
-	private void buttonClicked(){
+	void buttonClicked(){
 		// toggles rolling. Sets rolling to the oposite of what it was
 		rolling = !rolling;
 	}
